@@ -15,9 +15,9 @@ const (
 
 var runTransitions = map[RunState]map[RunState]struct{}{
 	RunImported:       {RunQualityChecked: {}, RunRejected: {}},
-	RunQualityChecked: {RunProcessing: {}, RunRejected: {}, RunSuperseded: {}},
+	RunQualityChecked: {RunProcessing: {}, RunRejected: {}},
 	RunProcessing:     {RunProcessed: {}, RunRejected: {}},
-	RunProcessed:      {},
+	RunProcessed:      {RunSuperseded: {}},
 	RunRejected:       {},
 	RunSuperseded:     {},
 }
