@@ -36,7 +36,7 @@ func (r *TransectPlanRepository) List(query dto.TransectPlanQuery) ([]model.Tran
 func (r *TransectPlanRepository) Get(id uint) (model.TransectPlan, error) {
 	var item model.TransectPlan
 	if err := r.db.Preload("SurveyArea").First(&item, id).Error; err != nil {
-		return item, fmt.Errorf("get transect plan: %v", err)
+		return item, fmt.Errorf("get transect plan: %w", err)
 	}
 	return item, nil
 }

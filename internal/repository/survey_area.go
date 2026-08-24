@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 
 	"gorm.io/gorm"
@@ -35,7 +36,7 @@ func (r *SurveyAreaRepository) List(query dto.SurveyAreaQuery) ([]model.SurveyAr
 func (r *SurveyAreaRepository) Get(id uint) (model.SurveyArea, error) {
 	var item model.SurveyArea
 	if err := r.db.First(&item, id).Error; err != nil {
-		return model.SurveyArea{}, fmt.Errorf("get survey area: %v", err)
+		return model.SurveyArea{}, fmt.Errorf("get survey area: %w", err)
 	}
 	return item, nil
 }
@@ -73,7 +74,7 @@ func (r *SurveyAreaRepository) Summary(id uint) (dto.AreaSummary, error) {
 	var gap model.CoverageGap
 	if err := r.db.Where("survey_area_id = ?", id).Order("detected_at DESC").First(&gap).Error; err == nil {
 		summary.LatestCoverage = gap.CoverageRatio
-	} else if err != gorm.ErrRecordNotFound {
+	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
 		return summary, err
 	}
 	return summary, nil
